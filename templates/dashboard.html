@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель управления</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    {% include 'sidebar.html' %}
+
+    <main class="main-content">
+        
+        <div class="page-header">
+            <div class="page-title welcome-title">
+                <h2>Добро пожаловать, {{ user.username }}</h2>
+                <p>Вот что происходит с вашим ботом сегодня</p>
+            </div>
+
+            <div class="header-actions">
+                
+                <div class="status-badge" id="statusBadge">
+                    <div class="status-dot" id="statusIndicator"></div>
+                    <span id="statusText">Подключение...</span>
+                </div>
+
+                <div class="user-profile-widget">
+                    <img src="{{ user.avatar }}" alt="avatar" class="user-avatar">
+                    <div class="user-details">
+                        <span class="user-name">{{ user.username }}</span>
+                        <span class="user-role">Admin</span>
+                    </div>
+                    <a href="/logout" class="btn-logout" title="Выйти">
+                        <i data-feather="log-out" style="width: 16px;"></i>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <div class="stats-grid">
+            <div class="card stat-card">
+                <div class="stat-icon icon-users" style="color: #a78bfa;">
+                    <i data-feather="users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="statTotalUsers">0</h3>
+                    <p>Всего участников</p>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon icon-online" style="color: #34d399;">
+                    <i data-feather="activity"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="statOnlineUsers">0</h3>
+                    <p>Сейчас онлайн</p>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon icon-msg" style="color: #fbbf24;">
+                    <i data-feather="message-square"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="statDailyMsg">0</h3>
+                    <p>Сообщения</p>
+                </div>
+            </div>
+
+            <div class="card stat-card">
+                <div class="stat-icon" style="color: #ec4899;">
+                    <i data-feather="terminal"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="statDailyCmd">0</h3>
+                    <p>Команды</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card full-width" style="margin-bottom: 30px;">
+            <div class="card-header">
+                <div class="card-title">
+                    <div class="icon-box"><i data-feather="bar-chart-2"></i></div>
+                    Активность за неделю
+                </div>
+            </div>
+            <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="activityChart"></canvas>
+            </div>
+        </div>
+
+        <div class="section-title">
+            <i data-feather="cpu" style="width: 18px;"></i>
+            Состояние системы
+        </div>
+
+        <div class="stats-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                    <span style="color: var(--text-muted);">CPU Load</span>
+                    <span class="system-value" id="sysCpuVal">0%</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill fill-cpu" id="sysCpuBar" style="background: #f43f5e; width: 0%;"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                    <span style="color: var(--text-muted);">RAM Usage</span>
+                    <span class="system-value" id="sysRamVal">0%</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill fill-ram" id="sysRamBar" style="background: #3b82f6; width: 0%;"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                    <span style="color: var(--text-muted);">Latency</span>
+                    <span class="system-value" id="sysPingVal">0 ms</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill fill-ping" id="sysPingBar" style="background: #10b981; width: 0%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card recent-activity" style="margin-top: 30px;">
+            <div class="card-header">
+                <div class="card-title">
+                    <div class="icon-box"><i data-feather="terminal"></i></div>
+                    Последние действия
+                </div>
+            </div>
+            <div class="activity-list" id="activityList">
+                <div style="text-align: center; color: var(--text-muted); padding: 20px;">Загрузка...</div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>feather.replace()</script>
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Отклоненные пользователи</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    {% include 'sidebar.html' %}
+
+    <main class="main-content">
+        
+        <div class="page-header">
+            <div class="page-title">
+                <h2>Отклоненные</h2>
+                <p>Архив заблокированных пользователей</p>
+            </div>
+            
+            <div class="header-actions">
+                <a href="/dashboard/confirmations" class="btn-primary" style="background: rgba(255, 255, 255, 0.05); color: var(--text-muted); border: 1px solid var(--glass-border); padding: 8px 16px; width: auto; box-shadow: none; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                    <i data-feather="arrow-left" style="width: 16px;"></i> Назад
+                </a>
+
+                <div class="user-profile-widget">
+                    <img src="{{ user.avatar }}" alt="avatar" class="user-avatar">
+                    <div class="user-details">
+                        <span class="user-name">{{ user.username }}</span>
+                        <span class="user-role">Admin</span>
+                    </div>
+                    <a href="/logout" class="btn-logout" title="Выйти">
+                        <i data-feather="log-out" style="width: 16px;"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <div class="card-header">
+                <div class="card-title">
+                    <div class="icon-box" style="color: #ef4444; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2);">
+                        <i data-feather="user-x"></i>
+                    </div>
+                    Список блокировки
+                </div>
+                
+                <div style="width: 250px;">
+                    <input type="text" id="searchInput" placeholder="Поиск по имени..." style="padding: 10px 14px; font-size: 0.9rem;">
+                </div>
+            </div>
+
+            <div id="deniedContainer" class="pending-grid">
+                <div style="color: #aaa; font-style: italic;">Загрузка...</div>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="modal-overlay" id="customConfirmModal">
+        <div class="modal-box">
+            <div style="margin-bottom: 15px;">
+                <div style="width: 50px; height: 50px; background: rgba(124, 58, 237, 0.2); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                    <i data-feather="help-circle" style="width: 24px; height: 24px;"></i>
+                </div>
+            </div>
+            <div class="modal-title">Подтверждение</div>
+            <div class="modal-text" id="confirmMessage">Вы уверены?</div>
+            <div class="modal-actions">
+                <button class="btn-modal btn-cancel" id="btnCancel">Отмена</button>
+                <button class="btn-modal btn-confirm" id="btnConfirm">Восстановить</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/deny.js"></script>
+    <script>feather.replace()</script>
+</body>
+</html>

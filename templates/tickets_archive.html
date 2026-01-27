@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Архив тикетов</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {% include 'sidebar.html' %}
+    <main class="main-content">
+        <div class="page-header">
+            <div class="page-title">
+                <h2>Архив Тикетов</h2>
+                <p>История закрытых обращений</p>
+            </div>
+            
+            <div class="header-actions">
+                <div class="status-badge" id="statusBadge">
+                    <div class="status-dot" id="statusIndicator"></div>
+                    <span id="statusText">Подключение...</span>
+                </div>
+
+                <a href="/dashboard/tickets" class="btn-primary" style="background: rgba(255, 255, 255, 0.05); color: var(--text-muted); border: 1px solid var(--glass-border); padding: 8px 16px; width: auto; box-shadow: none; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                    <i data-feather="arrow-left" style="width: 16px;"></i> Активные тикеты
+                </a>
+                
+                <div class="user-profile-widget">
+                    <img src="{{ user.avatar }}" alt="avatar" class="user-avatar">
+                    <div class="user-details">
+                        <span class="user-name">{{ user.username }}</span>
+                        <span class="user-role">Admin</span>
+                    </div>
+                    <a href="/logout" class="btn-logout" title="Выйти">
+                        <i data-feather="log-out" style="width: 16px;"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card full-width">
+            <div class="card-header">
+                <div class="card-title">
+                    <i data-feather="archive" style="color: #f472b6;"></i> Сохраненные транскрипты
+                </div>
+            </div>
+            
+            <div class="db-table-wrapper">
+                <table style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">ID</th>
+                            <th style="width: 100px;">Тип</th>
+                            <th style="width: 200px;">Автор</th>
+                            <th>Тема</th>
+                            <th style="width: 150px;">Создан</th>
+                            <th style="width: 120px;">Транскрипт</th>
+                        </tr>
+                    </thead>
+                    <tbody id="archiveTable">
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 40px; color: #777;">
+                                Загрузка архива...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/tickets_archive.js"></script>
+</body>
+</html>

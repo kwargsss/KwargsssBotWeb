@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Статус доступа</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
+</head>
+<body class="centered-layout">
+    
+    <div class="card" style="width: 100%; max-width: 420px; text-align: center; padding: 40px;">
+        
+        {% if user.is_approved == -1 %}
+            <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+                <div style="width: 80px; height: 80px; background: rgba(239, 68, 68, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.3);">
+                    <i data-feather="x-circle" style="width: 40px; height: 40px; color: #ef4444;"></i>
+                </div>
+            </div>
+
+            <h2 style="margin-bottom: 10px; font-weight: 700; color: #ef4444;">Доступ отклонен</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px; line-height: 1.6; font-size: 0.95rem;">
+                Администратор отклонил ваш запрос.<br>
+                Свяжитесь с владельцем для выяснения причин.
+            </p>
+
+        {% else %}
+            <div style="display: flex; justify-content: center; margin-bottom: 25px;">
+                <div style="width: 80px; height: 80px; background: rgba(250, 204, 21, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px rgba(250, 204, 21, 0.2); border: 1px solid rgba(250, 204, 21, 0.3);">
+                    <i data-feather="lock" style="width: 40px; height: 40px; color: #facc15;"></i>
+                </div>
+            </div>
+
+            <h2 style="margin-bottom: 10px; font-weight: 700;">Доступ ограничен</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px; line-height: 1.6; font-size: 0.95rem;">
+                Ваш запрос отправлен администратору.<br>
+                Пожалуйста, дождитесь подтверждения.
+            </p>
+        {% endif %}
+        
+        <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); border-radius: 16px; padding: 15px; display: flex; align-items: center; gap: 15px; margin-bottom: 30px; text-align: left;">
+            <img src="{{ user.avatar }}" alt="avatar" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary); background: #222;">
+            <div style="overflow: hidden;">
+                <div style="font-weight: 600; font-size: 1.1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ user.username }}</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted);">Discord User</div>
+            </div>
+        </div>
+        
+        {% if user.is_approved != -1 %}
+        <button id="btnReload" class="btn-primary" style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <i data-feather="refresh-cw"></i> Проверить статус
+        </button>
+        {% endif %}
+
+        <a href="/logout" style="color: #ef4444; text-decoration: none; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; padding: 5px 10px; border-radius: 8px;">
+            <i data-feather="log-out" style="width: 16px;"></i> Выйти из аккаунта
+        </a>
+    </div>
+
+    <script>feather.replace()</script>
+    <script src="/static/js/pending.js"></script>
+</body>
+</html>

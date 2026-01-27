@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Тикет #{{ ticket_id }}</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {% include 'sidebar.html' %}
+    <main class="main-content">
+        <div class="page-header">
+            <div class="page-title">
+                <h2>Тикет #{{ ticket_id }}</h2>
+            </div>
+            
+            <div class="header-actions">
+                <div class="status-badge" id="statusBadge">
+                    <div class="status-dot" id="statusIndicator"></div>
+                    <span id="statusText">Подключение...</span>
+                </div>
+
+                <a href="/dashboard/tickets" class="btn-primary" style="background: rgba(255, 255, 255, 0.05); color: var(--text-muted); border: 1px solid var(--glass-border); padding: 8px 16px; width: auto; box-shadow: none; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                    <i data-feather="arrow-left" style="width: 16px;"></i> Назад
+                </a>
+
+                <button id="btnClose" onclick="sendAction('close_request')" class="btn-primary" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);">
+                    <i data-feather="lock" style="width: 16px;"></i> Закрыть
+                </button>
+
+                <button id="btnDelete" onclick="sendAction('delete_request')" class="btn-primary" style="display: none; background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3);">
+                    <i data-feather="trash-2" style="width: 16px;"></i> Удалить
+                </button>
+            </div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-messages" id="chatBox">
+                <div style="text-align: center; color: #777; margin-top: 20px;" id="loadingMsg">Загрузка истории...</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="msgInput" placeholder="Напишите ответ..." onkeypress="handleEnter(event)">
+                <button onclick="sendReply()" class="btn-primary" style="width: auto; padding: 0 20px;"><i data-feather="send"></i></button>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="customConfirmModal">
+        <div class="modal-box">
+            <div style="margin-bottom: 15px;">
+                <div style="width: 50px; height: 50px; background: rgba(124, 58, 237, 0.2); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                    <i data-feather="help-circle" style="width: 24px; height: 24px;"></i>
+                </div>
+            </div>
+            <div class="modal-title">Подтверждение</div>
+            <div class="modal-text" id="confirmMessage">Вы уверены?</div>
+            
+            <div class="modal-actions">
+                <button class="btn-modal btn-cancel" id="btnCancel">Отмена</button>
+                <button class="btn-modal btn-confirm" id="btnConfirm">Да</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+    
+    <script>
+        window.TicketConfig = {
+            ticketId: "{{ ticket_id }}",
+            adminName: "{{ user.username }}",
+            adminAvatar: "{{ user.avatar }}"
+        };
+    </script>
+    <script src="/static/js/ticket_chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Embed Конструктор</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
+</head>
+<body>
+
+    {% include 'sidebar.html' %}
+
+    <main class="main-content">
+        
+        <input type="hidden" id="authorId" value="{{ user.discord_id }}">
+
+        <div class="page-header">
+            <div class="page-title">
+                <h2>Конструктор сообщений</h2>
+                <p>Создание красивых постов и объявлений</p>
+            </div>
+            
+            <div class="header-actions">
+                <div class="version-switch">
+                    <button class="btn-switch active" id="btnSwitchV1">Embed V1</button>
+                    <button class="btn-switch" id="btnSwitchV2">Components V2</button>
+                </div>
+
+                <div class="status-badge" id="statusBadge">
+                    <div class="status-dot" id="statusIndicator"></div>
+                    <span id="statusText">Подключение...</span>
+                </div>
+
+                <div class="user-profile-widget">
+                    <img src="{{ user.avatar }}" alt="avatar" class="user-avatar">
+                    <div class="user-details">
+                        <span class="user-name">{{ user.username }}</span>
+                        <span class="user-role">Admin</span>
+                    </div>
+                    <a href="/logout" class="btn-logout" title="Выйти">
+                        <i data-feather="log-out" style="width: 16px;"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="builder-layout">
+            
+            <div class="card" style="width: 100%; padding: 30px;">
+                <div class="card-header">
+                    <div class="card-title">
+                        <div class="icon-box"><i data-feather="edit-3"></i></div>
+                        <span id="editorTitle">Редактор V1</span>
+                    </div>
+                    <button id="btnClear" class="btn-clear-icon" title="Очистить всё">
+                        <i data-feather="refresh-ccw" style="width: 16px; height: 16px;"></i>
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label>Канал</label>
+                    <div class="select-wrapper">
+                        <select id="channelSelect"><option>Загрузка...</option></select>
+                    </div>
+                </div>
+
+                <div id="builder-v1">
+                    <div class="form-group">
+                        <label>Заголовок</label>
+                        <input type="text" id="embedTitle" placeholder="Title">
+                    </div>
+                    <div class="form-group">
+                        <label>Описание</label>
+                        <textarea id="embedDesc" rows="5" placeholder="Description..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Цвет</label>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <input type="color" id="embedColor" value="#7c3aed" style="width: 50px; height: 50px; padding: 0; border: none;">
+                            <div style="font-size: 0.8rem; color: #777;">Цвет полоски</div>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="form-group">
+                            <label>Image URL</label>
+                            <input type="text" id="embedImage" placeholder="https://...">
+                        </div>
+                        <div class="form-group">
+                            <label>Thumbnail URL</label>
+                            <input type="text" id="embedThumbnail" placeholder="https://...">
+                        </div>
+                    </div>
+                    <hr class="divider">
+                    <div class="card-header small">
+                        <div class="card-title" style="font-size: 0.9rem;">Поля (Fields)</div>
+                        <button type="button" id="btnAddField" class="btn-primary small-btn">+ Добавить</button>
+                    </div>
+                    <div id="fieldsContainer"></div>
+                </div>
+
+                <div id="builder-v2" style="display: none;">
+                    <div class="form-group">
+                        <label>Основной текст (Markdown поддерживается)</label>
+                        <textarea id="v2Content" rows="6" placeholder="# Заголовок\nЖирный текст: **bold**\nКод: `code`"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Картинка (Media URL)</label>
+                        <input type="text" id="v2Image" placeholder="https://...">
+                    </div>
+                    <div class="form-group">
+                        <label>Подсказка на картинке (Overlay)</label>
+                        <input type="text" id="v2ImageDesc" placeholder="Например: ПОДСКАЗКА">
+                    </div>
+                    <hr class="divider">
+                    <div class="form-group">
+                        <label>Файл для скачивания (URL)</label>
+                        <input type="text" id="v2FileUrl" placeholder="https://site.com/file.pdf">
+                    </div>
+                     <div class="form-group">
+                        <label>Имя файла (с расширением)</label>
+                        <input type="text" id="v2FileName" placeholder="document.pdf">
+                    </div>
+                </div>
+
+                <hr class="divider">
+
+                <div class="card-header small">
+                    <div class="card-title" style="font-size: 0.9rem;">Кнопки (Buttons)</div>
+                    <button type="button" id="btnAddButton" class="btn-primary small-btn">+ Кнопка</button>
+                </div>
+                <div id="buttonsContainer"></div>
+
+                <hr class="divider">
+                <button id="btnSendEmbed" class="btn-primary">Отправить</button>
+                <div id="statusMessage" style="margin-top: 15px; font-size: 0.9rem;"></div>
+            </div>
+
+            <div id="preview-v1" class="discord-preview-box">
+                <div class="discord-message-group">
+                    <div class="discord-avatar" style="background-image: url('https://cdn.discordapp.com/embed/avatars/0.png');"></div>
+                    <div class="discord-message-content">
+                        <div class="discord-author-name">
+                            Bot Name <span class="discord-bot-tag">BOT</span>
+                            <span class="msg-timestamp">Сегодня, в 12:00</span>
+                        </div>
+                        <div class="d-embed">
+                            <div class="d-embed-color" id="prevColorBar" style="background-color: #7c3aed;"></div>
+                            <div class="d-embed-inner">
+                                <div class="d-embed-title" id="prevTitle">Заголовок</div>
+                                <div class="d-embed-desc" id="prevDesc">Текст сообщения...</div>
+                                <div class="d-embed-fields" id="prevFields"></div>
+                                <div class="d-embed-image" id="prevImageBox" style="display: none;">
+                                    <img id="prevImage" src="" alt="">
+                                </div>
+                                <img id="prevThumb" class="d-embed-thumb" src="" alt="" style="display: none;">
+                                <div class="d-embed-footer">
+                                    <img src="{{ user.avatar }}" alt="" style="width: 20px; height: 20px; border-radius: 50%;">
+                                    <span>{{ user.username }} • Сегодня</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="prevButtons" class="d-buttons-grid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="preview-v2" class="discord-preview-box" style="display: none;">
+                <div class="discord-message-group">
+                    <div class="discord-avatar" style="background-image: url('https://cdn.discordapp.com/embed/avatars/0.png');"></div>
+                    <div class="discord-message-content">
+                        <div class="discord-author-name">
+                            Bot Name <span class="discord-bot-tag">BOT</span>
+                            <span class="msg-timestamp">Сегодня, в 12:00</span>
+                        </div>
+                        
+                        <div class="v2-container">
+                            <div class="v2-content-text markdown-body" id="prevV2Content">
+                                # Добро пожаловать!<br>Текст сообщения...
+                            </div>
+
+                            <div class="v2-media-gallery" id="prevV2ImageBox" style="display: none;">
+                                <img id="prevV2Image" src="" alt="">
+                                <div class="v2-overlay-tag" id="prevV2Hint">ПОДСКАЗКА</div>
+                            </div>
+                            
+                            <div class="v2-separator"></div>
+                            <div id="prevV2Buttons" class="v2-sections-list"></div>
+
+                            <div class="v2-file-card" id="prevV2FileBox" style="display: none;">
+                                <div class="v2-file-icon"><i data-feather="file-text"></i></div>
+                                <div class="v2-file-info">
+                                    <div class="v2-file-header">Файл для скачивания:</div>
+                                    <div class="v2-file-name" id="prevV2FileName">file.pdf</div>
+                                </div>
+                                <div class="v2-file-download"><i data-feather="download"></i></div>
+                            </div>
+                            <div class="v2-accent-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>feather.replace()</script>
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/send_message.js"></script>
+</body>
+</html>

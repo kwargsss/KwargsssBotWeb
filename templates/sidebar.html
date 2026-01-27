@@ -1,0 +1,103 @@
+<aside class="sidebar" id="sidebar">
+    <div class="brand">
+        <div class="brand-icon">
+            <i data-feather="command" color="white"></i>
+        </div>
+        <span class="brand-text">KwargsssBot</span>
+    </div>
+    
+    <ul class="nav-links">
+        
+        {% if user.is_approved %}
+        <li class="nav-item">
+            <a href="/dashboard" class="{% if request.url.path == '/dashboard' %}active{% endif %}">
+                <i data-feather="grid" class="nav-icon"></i>
+                <span class="nav-text">Дашборд</span>
+            </a>
+        </li>
+        {% endif %}
+        
+        {% if user.is_approved %}
+        <li class="nav-item">
+            <a href="/dashboard/send_message" class="{% if request.url.path == '/dashboard/send_message' %}active{% endif %}">
+                <i data-feather="message-square" class="nav-icon"></i>
+                <span class="nav-text">Embed Конструктор</span>
+            </a>
+        </li>
+        {% endif %}
+        
+        {% if user.is_admin %}
+        <li class="nav-item">
+            <a href="/dashboard/confirmations" class="{% if 'confirmations' in request.url.path or 'deny' in request.url.path %}active{% endif %}">
+                <i data-feather="users" class="nav-icon"></i>
+                <span class="nav-text">Подтверждения</span>
+            </a>
+        </li>
+        {% endif %}
+
+        {% if user.is_approved %}
+        <li class="nav-item">
+            <a href="/dashboard/database" class="{% if 'database' in request.url.path %}active{% endif %}">
+                <i data-feather="database" class="nav-icon"></i>
+                <span class="nav-text">База данных</span>
+            </a>
+        </li>
+        {% endif %}
+
+        {% if user.is_approved %}
+        <li class="nav-item">
+            <a href="/dashboard/tickets" class="{% if '/tickets' in request.url.path %}active{% endif %}">
+                <i data-feather="life-buoy" class="nav-icon"></i>
+                <span class="nav-text">Тикеты</span>
+            </a>
+        </li>
+        {% endif %}
+
+    </ul>
+
+    <div class="sidebar-footer">
+        <button class="sidebar-toggle" id="sidebarToggle">
+            <i data-feather="chevron-left"></i>
+        </button>
+    </div>
+</aside>
+
+<script>
+    // 1. Логика клика (Запускается, когда страница полностью загружена)
+    document.addEventListener('DOMContentLoaded', () => {
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('sidebarToggle');
+
+        if (toggleBtn && sidebar) {
+            // Удаляем старые обработчики (на всякий случай) и ставим новый
+            toggleBtn.onclick = function(e) {
+                e.preventDefault();
+                
+                sidebar.classList.toggle('collapsed');
+                
+                // Сохраняем выбор пользователя
+                const isCollapsed = sidebar.classList.contains('collapsed');
+                localStorage.setItem('sidebarCollapsed', isCollapsed);
+            };
+        } else {
+        }
+    });
+
+    // 2. Логика "Без мигания" (Запускается мгновенно при чтении файла)
+    (function() {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+            const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            if (isCollapsed) {
+                sidebar.classList.add('collapsed');
+                // Временно отключаем анимацию, чтобы меню не "съезжало" на глазах при загрузке
+                sidebar.style.transition = 'none';
+                requestAnimationFrame(() => {
+                    setTimeout(() => {
+                        sidebar.style.transition = ''; 
+                    }, 300);
+                });
+            }
+        }
+    })();
+</script>

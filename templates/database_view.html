@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Таблица: {{ table_name }}</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {% include 'sidebar.html' %}
+    <main class="main-content">
+        
+        <div class="page-header">
+            <div class="page-title">
+                <h2>{{ table_name }}</h2>
+                <p>Просмотр и поиск данных таблицы</p>
+            </div>
+            
+        <div class="header-actions">
+                <div class="status-badge" id="statusBadge">
+                    <div class="status-dot" id="statusIndicator"></div>
+                    <span id="statusText">Подключение...</span>
+                </div>
+
+                <a href="/dashboard/database" class="btn-primary" style="background: rgba(255, 255, 255, 0.05); color: var(--text-muted); border: 1px solid var(--glass-border); padding: 8px 16px; width: auto; box-shadow: none; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+                    <i data-feather="arrow-left" style="width: 16px;"></i> Назад
+                </a>
+
+                <div class="user-profile-widget">
+                    <img src="{{ user.avatar }}" alt="avatar" class="user-avatar">
+                    <div class="user-details">
+                        <span class="user-name">{{ user.username }}</span>
+                        <span class="user-role">Admin</span>
+                    </div>
+                    <a href="/logout" class="btn-logout" title="Выйти">
+                        <i data-feather="log-out" style="width: 16px;"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="db-controls">
+            <input type="text" id="dbSearch" class="search-input" placeholder="Поиск по нику, ID или сумме...">
+        </div>
+
+        <div class="db-table-wrapper">
+            <table id="dataTable">
+                <thead></thead>
+                <tbody>
+                    <tr><td colspan="100" style="text-align: center; padding: 40px; color: var(--text-muted);">Ожидание данных...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    
+    <script>const CURRENT_TABLE = "{{ table_name }}";</script>
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/database_viewer.js"></script>
+    <script>feather.replace()</script>
+</body>
+</html>

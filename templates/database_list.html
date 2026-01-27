@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>База данных</title>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    {% include 'sidebar.html' %}
+    <main class="main-content">
+        
+        <div class="page-header">
+            <div class="page-title">
+                <h2>База данных</h2>
+                <p>Выберите таблицу для просмотра</p>
+            </div>
+            
+            <div class="header-actions">
+                <div class="status-badge" id="statusBadge">
+                    <div class="status-dot" id="statusIndicator"></div>
+                    <span id="statusText">Подключение...</span>
+                </div>
+
+                <div class="user-profile-widget">
+                    <img src="{{ user.avatar }}" alt="avatar" class="user-avatar">
+                    <div class="user-details">
+                        <span class="user-name">{{ user.username }}</span>
+                        <span class="user-role">Admin</span>
+                    </div>
+                    <a href="/logout" class="btn-logout" title="Выйти">
+                        <i data-feather="log-out" style="width: 16px;"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            {% for table in tables %}
+            <a href="/dashboard/database/{{ table.name }}" class="card stat-card" style="text-decoration: none; color: inherit; transition: transform 0.2s;">
+                <div class="stat-icon" style="background: rgba(139, 92, 246, 0.15); color: #8b5cf6; border: 1px solid rgba(139, 92, 246, 0.2);">
+                    <i data-feather="{{ table.icon }}"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 style="font-size: 1.4rem;">{{ table.name }}</h3>
+                    <p>{{ table.label }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </main>
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/database_list.js"></script>
+    <script>feather.replace()</script>
+</body>
+</html>
