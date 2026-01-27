@@ -1,7 +1,7 @@
 import aiosqlite
 
-from config import DB_FILE, SUPER_ADMIN_ID
-from logger import log
+from app.core.config import DB_FILE, SUPER_ADMIN_ID
+from app.core.logger import log
 
 
 async def init_db():

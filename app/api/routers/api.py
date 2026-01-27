@@ -1,12 +1,12 @@
-import config
-import database
+from app.core.config import *
+import app.core.database as database
 
-from logger import log
+from app.core.logger import log
 from fastapi import APIRouter, Depends, HTTPException, Header, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from dependencies import get_admin_user, get_authorized_user, get_current_user
-from state import bot_state, manager
+from app.api.dependencies import get_admin_user, get_current_user
+from app.core.state import bot_state, manager
 
 
 router = APIRouter(prefix="/api")
@@ -57,7 +57,7 @@ async def send_command_api(
 ):
     is_authorized = False
 
-    if x_secret and x_secret == config.API_SECRET: 
+    if x_secret and x_secret == API_SECRET: 
         is_authorized = True
     else:
         user = await get_current_user(request)

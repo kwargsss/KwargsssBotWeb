@@ -2,7 +2,7 @@ import logging
 import requests
 import threading
 import html
-import config
+import app.core.config as config
 
 
 class TelegramHandler(logging.Handler):

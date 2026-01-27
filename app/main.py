@@ -1,11 +1,12 @@
 import uvicorn
 import logging
 import json
-import config
-import database
+import os
+import app.core.config as config
+import app.core.database as database
 import traceback
 import time
-import backup
+import services.backup as backup
 import asyncio
 
 from contextlib import asynccontextmanager
@@ -17,9 +18,9 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from fastapi.templating import Jinja2Templates
-from state import manager, bot_state
-from routers import auth, dashboard, tickets, api
-from logger import log
+from app.core.state import manager, bot_state
+from app.api.routers import auth, dashboard, tickets, api
+from app.core.logger import log
 
 
 class EndpointFilter(logging.Filter):
@@ -45,19 +46,22 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
+
+app.mount("/static", StaticFiles(directory=os.path.join(FRONTEND_DIR, "static")), name="static")
+templates = Jinja2Templates(directory=os.path.join(FRONTEND_DIR, "templates"))
 
 app.add_middleware(
     SessionMiddleware,
     secret_key=config.SESSION_SECRET,
     same_site="lax",
-    
+    #https_only=True
 )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["GET", "POST"],
     allow_headers=["*"],

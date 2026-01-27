@@ -1,4 +1,4 @@
-import database
+import app.core.database as database
 
 from fastapi import Request, HTTPException, Depends
 

@@ -3,9 +3,10 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+TEMPLATES_DIR = BASE_DIR / "frontend" / "templates"
 
-load_dotenv()
+load_dotenv(BASE_DIR / ".env")
 
 API_SECRET = os.getenv("API_SECRET")
 SESSION_SECRET = os.getenv("SESSION_SECRET")

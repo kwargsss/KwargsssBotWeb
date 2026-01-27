@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
-from dependencies import get_admin_user
-from state import bot_state, manager
+from app.api.dependencies import get_admin_user
+from app.core.state import bot_state, manager
+from app.core.config import *
 
 
 router = APIRouter(prefix="/dashboard/tickets", tags=["tickets"])
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 @router.get("/", response_class=HTMLResponse)
 async def tickets_index(request: Request, user: dict = Depends(get_admin_user)):

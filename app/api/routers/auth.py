@@ -1,16 +1,16 @@
 import httpx
-import config
-import database
+from app.core.config import *
+import app.core.database as database
 
-from logger import log
+from app.core.logger import log
 from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
-from dependencies import get_current_user
+from app.api.dependencies import get_current_user
 
 
 router = APIRouter()
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 @router.get("/", include_in_schema=False)
 async def main(request: Request):
@@ -27,7 +27,7 @@ async def login_page(request: Request):
 @router.get("/auth/discord")
 async def login_discord():
     scope = "identify"
-    url = f"https://discord.com/api/oauth2/authorize?client_id={config.DISCORD_CLIENT_ID}&redirect_uri={config.REDIRECT_URI}&response_type=code&scope={scope}"
+    url = f"https://discord.com/api/oauth2/authorize?client_id={DISCORD_CLIENT_ID}&redirect_uri={REDIRECT_URI}&response_type=code&scope={scope}"
     return RedirectResponse(url)
 
 @router.get("/auth/callback")
@@ -37,11 +37,11 @@ async def auth_callback(code: str, request: Request):
             token_resp = await client.post(
                 "https://discord.com/api/oauth2/token",
                 data={
-                    "client_id": config.DISCORD_CLIENT_ID,
-                    "client_secret": config.DISCORD_CLIENT_SECRET,
+                    "client_id": DISCORD_CLIENT_ID,
+                    "client_secret": DISCORD_CLIENT_SECRET,
                     "grant_type": "authorization_code",
                     "code": code,
-                    "redirect_uri": config.REDIRECT_URI,
+                    "redirect_uri": REDIRECT_URI,
                 },
                 headers={"Content-Type": "application/x-www-form-urlencoded"},
             )

@@ -1,10 +1,10 @@
 import aiosqlite
 import httpx
 import asyncio
-import config
+import app.core.config as config
 
 from datetime import datetime
-from logger import log
+from app.core.logger import log
 
 
 async def perform_backup():
