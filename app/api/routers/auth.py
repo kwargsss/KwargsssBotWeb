@@ -1,7 +1,8 @@
 import httpx
-from app.core.config import *
+import uuid
 import app.core.database as database
 
+from app.core.config import *
 from app.core.logger import log
 from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse, HTMLResponse
@@ -25,13 +26,23 @@ async def login_page(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 @router.get("/auth/discord")
-async def login_discord():
+async def login_discord(request: Request):
     scope = "identify"
-    url = f"https://discord.com/api/oauth2/authorize?client_id={DISCORD_CLIENT_ID}&redirect_uri={REDIRECT_URI}&response_type=code&scope={scope}"
+
+    state = str(uuid.uuid4())
+    request.session["oauth_state"] = state
+
+    url = f"https://discord.com/api/oauth2/authorize?client_id={DISCORD_CLIENT_ID}&redirect_uri={REDIRECT_URI}&response_type=code&scope={scope}&state={state}"
     return RedirectResponse(url)
 
 @router.get("/auth/callback")
-async def auth_callback(code: str, request: Request):
+async def auth_callback(code: str, state: str, request: Request):
+    saved_state = request.session.pop("oauth_state", None)
+    
+    if not saved_state or state != saved_state:
+        log.warning("⚠️ Обнаружена попытка CSRF атаки или устаревшая сессия при входе.")
+        return HTMLResponse("<h1>Ошибка безопасности (State mismatch). Попробуйте войти заново.</h1>", status_code=403)
+
     try:
         async with httpx.AsyncClient() as client:
             token_resp = await client.post(

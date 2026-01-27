@@ -1,6 +1,7 @@
-from app.core.config import *
 import app.core.database as database
+import secrets
 
+from app.core.config import *
 from app.core.logger import log
 from fastapi import APIRouter, Depends, HTTPException, Header, Request
 from fastapi.responses import JSONResponse
@@ -57,7 +58,7 @@ async def send_command_api(
 ):
     is_authorized = False
 
-    if x_secret and x_secret == API_SECRET: 
+    if x_secret and secrets.compare_digest(x_secret, API_SECRET): 
         is_authorized = True
     else:
         user = await get_current_user(request)
