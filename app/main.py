@@ -56,8 +56,8 @@ app.add_middleware(
     SessionMiddleware,
     secret_key=config.SESSION_SECRET,
     same_site="lax",
-    #https_only=True
-)
+    https_only=False,
+)   
 
 app.add_middleware(
     CORSMiddleware,

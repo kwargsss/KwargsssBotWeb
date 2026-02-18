@@ -37,8 +37,13 @@ async def login_discord(request: Request):
 
 @router.get("/auth/callback")
 async def auth_callback(code: str, state: str, request: Request):
+    print(f"DEBUG: Session content: {request.session}") 
+    print(f"DEBUG: Received state from Discord: {state}")
+
     saved_state = request.session.pop("oauth_state", None)
-    
+
+    print(f"DEBUG: Saved state in session: {saved_state}")
+
     if not saved_state or state != saved_state:
         log.warning("⚠️ Обнаружена попытка CSRF атаки или устаревшая сессия при входе.")
         return HTMLResponse("<h1>Ошибка безопасности (State mismatch). Попробуйте войти заново.</h1>", status_code=403)
